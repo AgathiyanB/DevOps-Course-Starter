@@ -2,28 +2,44 @@
 {% block title %}To-Do App{% endblock %}
 
 {% block content %}
-  <div class="jumbotron">
-    <h1 class="display-4">To-Do App</h1>
-    <p class="lead">Just another to-do app.</p>
-  </div>
-
-
-  <form action={{ url_for("add_new_item") }} method="post">
-    <div class="form-group">
-        <label>New item:</label>
-        <input type="text" class="form-control" name="item-title">
+    <div class="jumbotron">
+        <h1 class="display-4">To-Do App</h1>
+        <p class="lead">Just another to-do app.</p>
     </div>
-      <button type="submit" class="btn btn-primary">Post</button>
-  </form>
 
-  <div class="row">
-    <div class="col-md-12">
-      <h2>Items</h2>
-      <ul class="list-group mb-4">
-          {% for item in items %}
-              <li class="list-group-item">{{ item.title }}<span style="float:right">{{ item.status }}</span></li>
-          {% endfor %}
-      </ul>
+    <form action={{ url_for("add_an_item") }} method="post">
+        <div class="form-group">
+            <label for="item-title">New item:</label>
+            <input type="text" class="form-control" name="item-title">
+        </div>
+        <button type="submit" class="btn btn-primary">Post</button>
+    </form>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Items</h2>
+            <ul class="list-group mb-4">
+                {% for item in items %}
+                    <li class="list-group-item">
+                        {{ item.title }}
+                        <div style="float:right">
+                            <form action={{ url_for("change_status") }} method="post" style="display:inline">
+                                <input type="hidden" name="item-id" value={{ item.id }}>
+                                {% if item.status =="Completed" %}
+                                    <button type="submit" class="btn btn-success">
+                                {% else %}
+                                    <button type="submit" class="btn btn-danger">
+                                {% endif %}
+                                {{ item.status }}</button>
+                            </form>
+                            <form action={{ url_for("remove_an_item") }} method="post" style="display:inline">
+                                <input type="hidden" name="item-id" value={{ item.id }}>
+                                <button type="submit" class="btn btn-secondary">Remove Item</button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
-  </div>
 {% endblock %}

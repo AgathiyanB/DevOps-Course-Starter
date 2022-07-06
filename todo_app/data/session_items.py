@@ -67,3 +67,34 @@ def save_item(item):
     session['items'] = updated_items
 
     return item
+
+
+def change_item_status(id):
+    """
+    Changes the status of an item in the session, and then saves the change.
+    If no existing item matches the ID of the specified item, nothing is done.
+
+    Args:
+        id: The id of item to change
+    """
+    item = get_item(id)
+
+    if item:
+        item['status'] = 'Completed' if item['status'] == 'Not Started' else 'Not Started'
+        save_item(item)
+
+    return item
+
+
+def remove_item(id):
+    """
+    Removes the item with given id from the items in the session. If no existing item matched the ID, nothing is done.
+
+    Args:
+        id: The id of the item to delete
+    """
+
+    session['items'] = [item for item in get_items() if item['id'] != int(id)]
+    return id
+
+

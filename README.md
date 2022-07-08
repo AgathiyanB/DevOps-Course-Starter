@@ -20,6 +20,8 @@ curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-
 
 ## Dependencies
 
+The project needs a Trello board, which it'll use to store information. To set this up, sign up for a Trello account and make a Trello board. You'll need to also generate an API key and a token which you can add to the environment variables (see below)
+
 The project uses a virtual environment to isolate package dependencies. To create the virtual environment and install required packages, run the following from your preferred shell:
 
 ```bash
@@ -32,7 +34,7 @@ You'll also need to clone a new `.env` file from the `.env.template` to store lo
 $ cp .env.template .env  # (first time only)
 ```
 
-The `.env` file is used by flask to set environment variables when running `flask run`. This enables things like development mode (which also enables features like hot reloading when you make a file change). There's also a [SECRET_KEY](https://flask.palletsprojects.com/en/1.1.x/config/#SECRET_KEY) variable which is used to encrypt the flask session cookie.
+The `.env` file is used by flask to set environment variables when running `flask run`. This enables things like development mode (which also enables features like hot reloading when you make a file change). There are two variables, API_KEY and TOKEN that need to be filled in with your details so the application can authenticate. There's also a [SECRET_KEY](https://flask.palletsprojects.com/en/1.1.x/config/#SECRET_KEY) variable which is used to encrypt the flask session cookie.
 
 ## Running the App
 

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 from todo_app.data.session_items import get_items, add_item
 
 from todo_app.flask_config import Config
@@ -12,8 +12,8 @@ def index():
     return render_template('index.html', items=get_items())
 
 
-@app.route('/items', methods=["POST"])
-def add_items():
+@app.route('/item', methods=["POST"])
+def add_new_item():
     add_item(request.form.get('item-title'))
-    return redirect('/')
+    return redirect(url_for('index'))
 

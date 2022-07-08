@@ -8,7 +8,7 @@
   </div>
 
 
-  <form action="/items" method="post">
+  <form action={{ url_for("add_new_item") }} method="post">
     <div class="form-group">
         <label>New item:</label>
         <input type="text" class="form-control" name="item-title">
@@ -21,7 +21,7 @@
       <h2>Items</h2>
       <ul class="list-group mb-4">
           {% for item in items %}
-              <li class="list-group-item">{{ item.title }}<button type="button" >{{ item.status }}</button></li>
+              <li class="list-group-item">{{ item.title }}<span style="float:right">{{ item.status }}</span></li>
           {% endfor %}
       </ul>
     </div>

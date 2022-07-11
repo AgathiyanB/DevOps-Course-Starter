@@ -95,6 +95,5 @@ def remove_item(id):
     """
 
     session['items'] = [item for item in get_items() if item['id'] != int(id)]
-    return id
 
 

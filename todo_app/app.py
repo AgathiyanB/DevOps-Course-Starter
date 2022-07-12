@@ -19,7 +19,7 @@ def add_item():
     return redirect(url_for('index'))
 
 
-@app.route('/item/status/', methods=["POST"])
+@app.route('/item/status', methods=["POST"])
 def change_status():
     trello_items.change_status(request.form.get('item-id'))
     return redirect(url_for('index'))

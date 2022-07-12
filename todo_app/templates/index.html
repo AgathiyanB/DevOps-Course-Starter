@@ -28,7 +28,7 @@
         <div class="col-md-12 border">
             <h2 style="padding:.5em">Items</h2>
             <ul class="list-group mb-4">
-                {% for item in items %}
+                {% for item in view_model.items %}
                     <li class="list-group-item">
                         <div style="position:relative;right:0;bottom:0">
                             <h3>{{ item.title }}</h3>

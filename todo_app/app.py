@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
-from operator import attrgetter
 import todo_app.data.trello_items as trello_items
 from todo_app.flask_config import Config
+from todo_app.models.index_model import IndexModel
 
 app = Flask(__name__)
 app.config.from_object(Config())
@@ -9,7 +9,8 @@ app.config.from_object(Config())
 
 @app.route('/')
 def index():
-    return render_template('index.html', items=sorted(trello_items.get_items(), key=attrgetter('status'), reverse=True))
+    index_model = IndexModel(trello_items.get_items())
+    return render_template('index.html', view_model=index_model)
 
 
 @app.route('/item/add', methods=["POST"])

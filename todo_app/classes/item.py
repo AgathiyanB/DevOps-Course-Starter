@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class Item:
-    def __init__(self, item_id, title, desc, due_date, status='Not Started'):
+    def __init__(self, item_id, title, desc, due_date=None, status='Not Started'):
         self.id = item_id
         self.title = title
         self.status = status

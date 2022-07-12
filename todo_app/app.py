@@ -21,7 +21,7 @@ def add_item():
 
 @app.route('/item/status', methods=["POST"])
 def change_status():
-    trello_items.change_status(request.form.get('item-id'))
+    trello_items.change_status(request.form.get('item-id'),request.form.get('new-status'))
     return redirect(url_for('index'))
 
 

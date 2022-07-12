@@ -11,7 +11,6 @@ base_api_url = 'https://api.trello.com/1'
 
 def build_url(base_url, path, params={}):
     """
-
     Args:
         base_url: Base_url of request
         path: Path (beginning with / character)
@@ -29,12 +28,16 @@ def build_url(base_url, path, params={}):
 
 board_lists = requests.get(build_url(base_api_url, f'/boards/{board_id}/lists', {"fields": "name"})).json()
 for board_list in board_lists:
-    if board_list['name'] == "To Do":
+    board_name = board_list['name']
+    if board_name == "To Do":
         to_do_list_id = board_list['id']
-    elif board_list['name'] == "Done":
+    elif board_name == "Done":
         done_list_id = board_list['id']
+    elif board_name == "Doing":
+        doing_list_id = board_list['id']
 
-list_names = {to_do_list_id: "To Do", done_list_id: "Done"}
+list_names = {to_do_list_id: "To Do", done_list_id: "Done", doing_list_id: "Doing"}
+list_ids = {"To Do": to_do_list_id, "Done": done_list_id, "Doing": doing_list_id}
 
 
 def get_items():
@@ -78,11 +81,11 @@ def add_item(title, desc, due_date):
     requests.post(build_url(base_api_url, '/cards', {"name": title, "desc": desc, "due": due_date, "idList": to_do_list_id}))
 
 
-def change_status(item_id):
+def change_status(item_id, new_status):
     item = get_item(item_id)
 
     if item:
-        new_list_id = to_do_list_id if item.status == "Done" else done_list_id
+        new_list_id = list_ids[new_status]
         requests.put(build_url(base_api_url, f'/cards/{item_id}', {"idList": new_list_id})).json()
 
 

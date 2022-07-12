@@ -5,9 +5,29 @@ from os import getenv
 board_id = getenv('BOARD_ID')
 api_key = getenv("API_KEY")
 token = getenv("TOKEN")
-auth_params = f'key={api_key}&token={token}'
+auth_params = {"key": api_key, "token": token}
+base_api_url = 'https://api.trello.com/1'
 
-board_lists = requests.get(f'https://api.trello.com/1/boards/{board_id}/lists?fields=name&{auth_params}').json()
+
+def build_url(base_url, path, params={}):
+    """
+
+    Args:
+        base_url: Base_url of request
+        path: Path (beginning with / character)
+        params: Parameters for the query excluding auth
+
+    Returns:
+        URL string with auth added
+    """
+    param_string = ""
+    for key in params:
+        param_string += f"{key}={params[key]}&"
+    param_string += f'key={api_key}&token={token}'
+    return f"{base_url}{path}?{param_string}"
+
+
+board_lists = requests.get(build_url(base_api_url, f'/boards/{board_id}/lists', {"fields": "name"})).json()
 for board_list in board_lists:
     if board_list['name'] == "To Do":
         to_do_list_id = board_list['id']
@@ -18,7 +38,13 @@ list_names = {to_do_list_id: "To Do", done_list_id: "Done"}
 
 
 def get_items():
-    cards = requests.get(f'https://api.trello.com/1/boards/{board_id}/cards?fields=name,idList&{auth_params}').json()
+    """
+    Fetches the saved item with the specified ID.
+
+    Returns:
+        items: All items from the trello board.
+    """
+    cards = requests.get(build_url(base_api_url, f'/boards/{board_id}/cards', {"fields": "name,idList"})).json()
     items = [Item(item['id'], item['name'], list_names[item['idList']]) for item in cards]
     return items
 
@@ -47,8 +73,7 @@ def add_item(title):
     Returns:
         item: The saved item.
     """
-
-    requests.post(f'https://api.trello.com/1/cards?name={title}&idList={to_do_list_id}&{auth_params}')
+    requests.post(build_url(base_api_url, '/cards', {"name": title, "idList": to_do_list_id}))
 
 
 def change_status(item_id):
@@ -56,7 +81,7 @@ def change_status(item_id):
 
     if item:
         new_list_id = to_do_list_id if item.status == "Done" else done_list_id
-        requests.put(f"https://api.trello.com/1/cards/{item_id}?idList={new_list_id}&{auth_params}").json()
+        requests.put(build_url(base_api_url, f'/cards/{item_id}', {"idList": new_list_id})).json()
 
 
 def remove_item(item_id):
@@ -67,4 +92,4 @@ def remove_item(item_id):
         item_id: The id of the item to delete
     """
 
-    requests.delete(f"https://api.trello.com/1/cards/{item_id}?{auth_params}")
+    requests.delete(build_url(base_api_url, f'/cards/{item_id}'))

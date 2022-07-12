@@ -39,13 +39,13 @@ list_names = {to_do_list_id: "To Do", done_list_id: "Done"}
 
 def get_items():
     """
-    Fetches the saved item with the specified ID.
+    Fetches the saved items.
 
     Returns:
         items: All items from the trello board.
     """
-    cards = requests.get(build_url(base_api_url, f'/boards/{board_id}/cards', {"fields": "name,idList"})).json()
-    items = [Item(item['id'], item['name'], list_names[item['idList']]) for item in cards]
+    cards = requests.get(build_url(base_api_url, f'/boards/{board_id}/cards', {"fields": "name,idList,desc,due"})).json()
+    items = [Item.from_trello_card(card, list_names[card['idList']]) for card in cards]
     return items
 
 
@@ -63,17 +63,19 @@ def get_item(item_id):
     return next((item for item in items if item.id == item_id), None)
 
 
-def add_item(title):
+def add_item(title, desc, due_date):
     """
     Adds a new item with the specified title to the session.
 
     Args:
         title: The title of the item.
+        desc: The description of the item
+        due_date: Date due of item
 
     Returns:
         item: The saved item.
     """
-    requests.post(build_url(base_api_url, '/cards', {"name": title, "idList": to_do_list_id}))
+    requests.post(build_url(base_api_url, '/cards', {"name": title, "desc": desc, "due": due_date, "idList": to_do_list_id}))
 
 
 def change_status(item_id):

@@ -1,4 +1,4 @@
-from todo_app.data.item import Item
+from todo_app.classes.item import Item
 import requests
 from os import getenv
 

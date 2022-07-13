@@ -17,3 +17,11 @@ def index_model(monkeypatch):
 
 def test_doing_items(index_model):
     assert doing_item in index_model.doing_items
+
+
+def test_to_do_items(index_model):
+    assert to_do_item in index_model.to_do_items
+
+
+def test_done_items(index_model):
+    assert done_item in index_model.done_items

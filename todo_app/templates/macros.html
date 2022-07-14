@@ -1,0 +1,61 @@
+{%  macro item_component(item) %}
+    <li class="list-group-item">
+        <div style="position:relative;right:0;bottom:0">
+            <h3>{{ item.title }}</h3>
+            <div class="border rounded border-secondary" style="padding:.5em">
+                <a>{{ item.desc }}</a>
+            </div>
+        </div>
+        <div style="padding:.5em;display:flex;align-items:center;justify-content:space-between">
+            <span>
+                Due on: {{ item.due_date_string }}
+            </span>
+
+            <div style="display:inline-flex;align-items:center;justify-content:space-evenly;width:20em">
+                {% if item.status == "Done" %}
+                    <span class="badge rounded-pill bg-success">{{ item.status }}</span>
+                {% elif item.status == "To Do" %}
+                    <span class="badge rounded-pill bg-danger">{{ item.status }}</span>
+                {% else %}
+                    <span class="badge rounded-pill bg-warning">{{ item.status }}</span>
+                {% endif %}
+                <form action={{ url_for("change_status") }} method="post">
+                    <input type="hidden" name="item-id" value="{{ item.id }}">
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-primary dropdown-toggle" id="{{ item.id }}-dropdown" data-toggle="dropdown">
+                            Change Status
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="{{ item.id }}-dropdown">
+                            {% for status in ["To Do","Doing","Done"] %}
+                                {% if item.status != status %}
+                                    <li><button class="dropdown-item" type="submit" name="new-status" value="{{ status }}">{{ status }}</button></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </form>
+
+                <form action={{ url_for("remove_item") }} method="post" style="display:inline">
+                    <input type="hidden" name="item-id" value={{ item.id }}>
+                    <button type="submit" class="btn btn-secondary">Remove Item</button>
+                </form>
+
+            </div>
+        </div>
+    </li>
+{% endmacro %}
+
+{% macro item_list(status,title) %}
+    {% set items_to_status = ({"To Do": view_model.to_do_items, "Doing": view_model.doing_items, "Done": view_model.done_items}) %}
+    {% set items = items_to_status[status] %}
+    <h2 style="padding:.5em">{{ title }}</h2>
+    <ul class="list-group mb-4">
+        {% if items|length > 0 %}
+            {% for item in items %}
+                {{ item_component(item) }}
+            {% endfor %}
+        {% else %}
+            <p>No Items</p>
+        {% endif %}
+    </ul>
+{% endmacro %}

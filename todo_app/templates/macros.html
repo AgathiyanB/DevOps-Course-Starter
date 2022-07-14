@@ -49,13 +49,13 @@
     {% set items_to_status = ({"To Do": view_model.to_do_items, "Doing": view_model.doing_items, "Done": view_model.done_items}) %}
     {% set items = items_to_status[status] %}
     <h2 style="padding:.5em">{{ title }}</h2>
-    <ul class="list-group mb-4">
-        {% if items|length > 0 %}
+    {% if items|length > 0 %}
+        <ul class="list-group mb-4">
             {% for item in items %}
                 {{ item_component(item) }}
             {% endfor %}
-        {% else %}
-            <p>No Items</p>
-        {% endif %}
-    </ul>
+        </ul>
+    {% else %}
+        <h4 class="border rounded border-secondary" style="margin:0 1em;padding:.5em;text-align:center">No Items</h4>
+    {% endif %}
 {% endmacro %}

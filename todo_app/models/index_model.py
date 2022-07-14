@@ -6,10 +6,6 @@ class IndexModel:
         self._items = items
 
     @property
-    def items(self):
-        return sorted(self._items, key=attrgetter('status'), reverse=True)
-
-    @property
     def doing_items(self):
         return self._find_items_by_status("Doing")
 

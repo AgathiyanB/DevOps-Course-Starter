@@ -10,7 +10,7 @@ fake_items = [doing_item, to_do_item, done_item]
 
 
 @pytest.fixture
-def index_model(monkeypatch):
+def index_model():
     model = IndexModel(fake_items)
     return model
 

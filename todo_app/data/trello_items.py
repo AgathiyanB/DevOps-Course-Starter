@@ -60,8 +60,10 @@ class TrelloClient:
         Returns:
             item: The saved item, or None if no items match the specified ID.
         """
-        items = self.get_items()
-        return next((item for item in items if item.id == item_id), None)
+        card = requests.get(self.build_url(self.base_api_url, f'/card/{item_id}',
+                                           {"fields": "name,idList,desc,due"})).json()
+        item = Item.from_trello_card(card, self.list_names[card['idList']])
+        return item
 
     def add_item(self, title, desc, due_date):
         """

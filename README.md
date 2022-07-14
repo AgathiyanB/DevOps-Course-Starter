@@ -58,5 +58,5 @@ Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser
 ##  Testing
 You can run the tests by running:
 ```bash
-$ pytest todo_app
+$ poetry run pytest todo_app
 ```

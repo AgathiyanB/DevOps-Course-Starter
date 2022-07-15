@@ -56,7 +56,7 @@ You should see output similar to the following:
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
 
 ##  Testing
-First put the driver for your web browser in the root directory. Then you can run the tests by running:
+First put the driver for your web browser in the root directory. Also in the .env.test file just fill in your api key and token so the trello api can be authenticated for tests. Then you can run the tests by running:
 ```bash
 $ poetry run pytest todo_app
 ```
